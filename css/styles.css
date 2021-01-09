@@ -1,0 +1,1064 @@
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    display: relative;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* 固定のtopbarのスタイリング */
+#topbar {
+    height: 65px;
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-evenly;
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: bold;
+}
+
+#top_container {
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#logo {
+    width: 50px;
+    height: 25px;
+    margin-left: 20px;
+}
+
+#logo_side,
+#logo_side_unlogined
+{
+    height: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 50px;
+    font-size: 14px;
+}
+
+#logo_side_unlogined {
+    margin-right: 20px;
+}
+
+#logo_side_unlogined > div,
+#logo_side > div {
+    padding: 0 10px;
+}
+
+#hamburger {
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    background-color:white;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.hamburger_line {
+    display: block;
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background-color:darkcyan;
+    border-radius: 4px;
+}
+
+#top_menu {
+    position: absolute;
+    top: 35px;
+    right: 20px;
+    width: 150px;
+    height: 100px;
+    background: white;
+    font-size: 14px;
+    opacity: 0;
+    text-align: center;
+    padding: 5px 0;
+    z-index: -1;
+}
+
+#top_container .top_menu_clicked {
+    top: 35px;
+    opacity: 1.0;
+    border: 3px solid darkcyan;
+    border-radius: 10px;
+    z-index: 10;
+}
+
+#top_menu ul li {
+    list-style-type: none;
+    cursor: pointer;
+}
+
+#top_menu ul li:hover {
+    opacity: 0.8;
+}
+
+#hamburger_line1 {
+    top: 2px;    
+}
+
+#hamburger_line2 {
+    top: 11px;
+}
+
+#hamburger_line3 {
+    bottom: 2px;
+}
+
+#hamburger .hamburger_line1_clicked {
+    transform: rotate(-45deg);
+    top: 10px;
+}
+
+#hamburger .hamburger_line2_clicked {
+    opacity: 0;
+}
+
+#hamburger .hamburger_line3_clicked {
+    transform: rotate(45deg);
+    top: 10px;
+}
+
+#logout_check,
+#quit_check {
+    width: 150px;
+    height: 75px;
+    font-size: 12px;
+    text-align: center;
+    background-color: white;
+    border: 3px solid darkcyan;
+    border-radius: 10px;
+    position: absolute;
+    top: 35px;
+    right: 20px;
+    opacity: 0;
+    z-index: -1;
+}
+
+
+#logout_no,
+#quit_no {
+    width: 150px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+#logout_no:hover,
+#quit_no:hover {
+    opacity: 0.8;
+}
+
+#top_container .logout_modal,
+#top_container .quit_modal {
+    opacity: 1;
+    z-index: 15;
+}
+
+#top_link {
+    height: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#top_link div {
+    flex-basis: 33%;
+}
+
+#top_link t2 {
+    display: inline-block;
+    width: 100%;
+    color: darkcyan;
+    text-align: center;
+}
+
+#top_link t2:hover,
+#top_link .top_link_selected t2
+{
+    color:white;
+}
+
+#top_link .top_link_selected
+{
+    background-color: darkslateblue;
+    cursor: pointer;
+}
+
+#top_link div:hover
+{
+    background-color: hsla(248, 39%, 39%, 0.7);
+    cursor: pointer;
+}
+
+#newpost_btn {
+    background-color: orange;
+    width: 100px;
+    height: 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    position: fixed;
+    right: 30px;
+    bottom: 40px;
+    z-index: 10;
+    text-align: center;
+}
+
+#newpost_btn:hover {
+    opacity: 0.7;
+}
+
+#newpost_btn a {
+    color: white;
+    font-size: 40px;
+    line-height: 35px;
+}
+
+#newpost_btn a span {
+    vertical-align: middle;
+    font-size: 14px;
+    line-height: 35px;
+}
+
+.icon {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 5px;
+}
+
+/* コンテンツのスタイリング（登録やログインなど文字メインの画面） */
+.contents {
+    padding-top: 80px;
+    width: 100%;
+    text-align: center;
+}
+
+.form_hidden {
+    opacity: 0;
+}
+
+.form_t1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.form_form {
+    text-align: left;    
+    margin: 0 auto;
+    margin-top: 30px;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.form_span {
+    font-size: 12px;
+    line-height: 14px;
+    vertical-align: top;
+}
+
+.form_input {
+    width: 300px;
+    box-sizing: border-box;
+}    
+
+.select {
+    width: 10px;
+}    
+
+.form_container {
+    width: 300px;
+    margin: 50px auto;
+    text-align: left;
+}
+
+.hidden {
+    display: none;
+}
+
+.form_p {
+    font-size: 16px;
+    margin-top: 30px;
+    line-height: 24px;
+    letter-spacing: 1px;
+}
+
+.form_label {
+    color: darkcyan;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.form_t2 {
+    display: inline-block;
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.selectlabel {
+    color: black;
+}
+
+.form_form > div {
+    margin-top: 20px;
+}
+
+.form_image {
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.error {
+    font-size: 14px;
+    color: red;
+    font-weight: bold;
+}
+
+.form_check {
+    margin: 0;
+}
+
+.post_container {
+    width: 90%;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.post_post {
+    position: relative;
+    width: 100px;
+    height: 150px;
+    padding: 5px 5px;
+    box-sizing: border-box;
+}
+
+.post_t2 {
+    font-size: 16px;
+    padding: 20px 0 0 20px;
+    text-align: left;
+    width: 100%;
+    display: inline-block;
+}
+
+.post_t3 {
+    margin: 20px 0 0 20px;
+    display: inline-block;
+    text-align: left;
+    width: 80%;
+}
+
+.post_multicontainer t2 {
+    display: inline-block;
+    width: 100%;
+    font-size: 16px;
+    text-align: left;
+    color: darkcyan;
+    font-weight: bold;
+    margin: 0 0 5px 5px;
+}
+
+.post_multicontainer {
+    width: 320px;
+    margin: 50px auto;
+}
+
+.post_multicontents {
+    width: 320px;
+    height: 150px;
+    display: flex;
+}
+
+.post_postimage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.post_a,
+.post_small_post {
+    width: 30%;
+    height: 70px;
+    position: relative;
+}
+
+.post_smallimage {
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    box-sizing: border-box;
+}
+
+.post_additionalcontents {
+    width: 310px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.post_additionalcontents .post_a,
+.post_additionalcontents .post_small_post {
+    width: 25%;
+    height: 80px;
+}
+
+.post_additionalcontents .post_small_post {
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.post_bigimage {
+    width: 320px;
+    height: 320px;
+    object-fit: contain;
+}
+
+.post_good,
+.post_good_small {
+    width: 25px;
+    height: 25px;
+    background-image: url('../images/icon_footprints.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 120px;
+    left: 70px;
+    opacity: 0.7;
+    font-size: 10px;
+    line-height: 30px;
+    text-align: center;
+    vertical-align: text-bottom;
+    color: darkcyan;
+    font-weight: bold;
+    text-shadow: 
+        1px 0 0 white,
+        0 1px 0 white,
+        -1px 0 0 white,
+        0 -1px 0 white;
+}
+
+.post_good_small {
+    font-size: 10px;
+    line-height: 25px;
+    width: 20px;
+    height: 20px;
+    top: 50px;
+    left: 40px;
+}
+
+.post_additionalcontents .post_good_small {
+    left: 50px;
+    top: 55px;
+}
+
+.post_good:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.post_good_selected {
+    color: darkred;
+}
+
+.post_images_comment {
+    width: 210px;
+    height: 150px;
+}
+
+.post_images {
+    width: 210px;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.post_comment {
+    width: 185px;
+    height: 65px;
+    padding: 10px;
+    box-sizing: border-box; 
+    border: 2px solid darkcyan;
+    border-radius: 10px;
+    margin: 5px 5px 5px 20px;
+    position: relative;
+}
+
+.post_comment:before {
+    content: "";
+    border: 15px solid darkcyan;
+    border-bottom-color: transparent;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    position: absolute;
+    top: 17.5px;
+    left: -30px;
+}
+
+.post_comment:after {
+    content: "";
+    border: 13px solid white;
+    border-bottom-color: transparent;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    position: absolute;
+    top: 19.5px;
+    left: -25px;
+}
+
+.post_comment p{
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+#post_delete,
+.pet_favorite {
+    width: 300px;
+    height: 25px;
+    border-radius: 10px;
+    background-color: darkorange;
+    color: white;
+    font-size: 16px;
+    line-height: 25px;
+    margin: 10px auto 20px;
+    cursor: pointer;
+}
+
+.pet_favorite_selected {
+    background-color: darkmagenta;
+}
+
+#post_delete_hidden {
+    width: 200px;
+    height: 50px;
+    background-color: white;
+    padding: 20px;
+    margin: 5px auto;
+    font-size: 12px;
+    border: 4px solid darkcyan;
+    border-radius: 5px;
+}
+
+#post_delete_hidden form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.post_delete_confirm {
+    cursor: pointer;
+}
+
+.post_delete_confirm:hover {
+    opacity: 0.8;
+}
+
+.contents .post_hidden {
+    display: none;
+}
+
+.post_span {
+    font-size: 12px;
+}
+
+.explain {
+    width: 320px;
+    height: 300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.explain_t1 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.explain div {
+    border-radius: 5px;
+    height: 80px;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#explain_div1 {
+    background-color: darkcyan;
+}
+
+#explain_div2 {
+    background-color: darkorange;
+}
+
+#explain_div3 {
+    background-color: darkviolet;
+}
+
+.explain t2 {
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+}
+
+.explain_container p {
+    color: black;
+    font-size: 12px;
+}
+
+.explain_container a {
+    color: firebrick;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.explain_container a:hover {
+    opacity: 0.7
+}
+
+.contents .last {
+    height: 100px;
+}
+
+.form_container .form_p #twitter {
+    color: firebrick;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form_container .form_p #twitter:hover {
+    opacity: 0.8;
+}
+
+.bottom {
+    padding: 50px 0 20px;
+    font-size: 12px;
+    text-align: center;
+}
+
+
+
+@media screen and (min-width: 601px) {
+    
+    .post_container {
+        width: 80%;
+    }
+    
+    #logo {
+        margin-left: 75px;
+    }
+
+    #logo_side {
+        margin-right: 115px;
+    }
+
+    #logo_side_unlogined {
+        margin-right: 75px;
+    }
+    
+    #hamburger {
+        right: 75px;
+    }
+    
+    .post_post {
+        position: relative;
+        width: 150px;
+        height: 225px;
+
+    }
+    
+    .post_good,
+    .post_good_small {
+        width: 30px;
+        height: 30px;
+        top: 180px;
+        left: 110px;
+        font-size: 16px;
+        line-height: 40px;
+    }
+    
+    .post_good_small,
+    .post_additionalcontents .post_good_small {
+        top: 110px;
+        left: 100px;
+    }
+    
+    .post_t2 {
+        font-size: 20px;
+        margin-left: 20px;
+    }
+    
+    .post_t3 {
+        font-size: 20px;
+        line-height: 50px;
+        margin-left: 20px;
+    }
+
+    .post_multicontainer t2 {
+        font-size: 20px;
+        line-height: 50px;
+    }
+    
+    .post_multicontainer {
+        width: 580px;
+    }
+    
+    .post_multicontents {
+        width: 580px;
+        height: 225px;
+    }
+    
+    .post_additionalcontents {
+        width: 580px;
+    }
+    
+    .post_smallimage,
+    .post_additionalcontents .post_a,
+    .post_additionalcontents .post_small_post { 
+        height: 150px;
+    } 
+
+    .post_additionalcontents .post_smallimage { 
+        padding-bottom: 10px;
+    } 
+    
+    .post_bigimage {
+        width: 500px;
+        height: 500px;
+    }
+    
+    .post_images_comment {
+        width: 430px;
+        height: 225px;
+    }
+    
+    .post_images {
+        width: 430px;
+        height: 150px;
+    }
+    
+    .post_comment {
+        width: 400px;
+        height: 60px;
+    }
+
+    .explain {
+        width: 580px;
+    }
+    
+    .explain_t1 {
+        font-size: 22px;
+    }
+    
+    .explain div {
+        border-radius: 10px;
+    }
+    
+    .explain t2 {
+        font-size: 16px;
+    }
+    
+    .explain p {
+        font-size: 14px;
+    }
+                
+    .bottom {
+        font-size: 14px;
+    }
+}
+@media screen and (min-width: 1025px) {
+   
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+    }
+    
+    #side_and_contents {
+        display: flex;
+        height: 100%;
+    }
+
+    #topbar {
+        position: fixed;
+        height: 100%;
+        width: 250px;
+        background-color: darkcyan;
+        color: white;
+    }   
+
+    .contents {
+        padding: 30px 50px 0px 300px;
+    }
+
+    #top_container {
+        height: 230px;
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+    
+    #logo {
+        width: 250px;
+        height: 40px;
+        padding-left: 20px;
+        margin: 0;
+        font-size: 35px;
+    }
+    
+    #logo_side {
+        height: 50px;
+        font-size: 35px;
+        margin-right: 10px;
+        flex-wrap: wrap;
+    }
+    
+    #logo_side p {
+        height: 50px;
+        vertical-align: middle;
+        line-height: 50px;
+    }
+
+    #logo_side_unlogined
+    {
+        height: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        margin: 0 20px 0 0;
+    }
+
+    #logo_side_unlogined > div
+    {
+        height: 30px;
+        font-size: 20px;
+        text-align: right;
+    }
+    #logo_side_unlogined > div > a {
+        color: white;
+    }
+    
+    #hamburger {
+        display: none;
+    }
+        
+    #top_menu {
+        position: relative;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        width: 250px;
+        height: 100px;
+        background: white;
+        opacity: 1;
+        font-size: 14px;
+        text-align: center;
+        padding: 5px 0;
+        z-index: 11;
+        color: white;
+    }
+
+    #logout,
+    #quit {
+        color: black;
+    }
+           
+    #logout_check,
+    #quit_check {
+        color: black;
+        top: 250px;
+        right: -155px;
+    }
+        
+    #top_link {
+        height: 120px;
+        flex-direction: column;
+    }
+    
+    #top_link div {
+        flex-basis: 30%;
+    }
+    
+    #top_link div t2 {
+        color: white;
+        line-height: 36px;
+    }
+    
+    #top_link div:hover
+    {
+        background-color: hsla(248, 39%, 39%, 0.5);
+    }
+    
+    .icon {
+        height: 50px;
+        width: 50px;
+    }
+    
+    /* コンテンツのスタイリング（登録やログインなど文字メインの画面） */
+        
+    .form_t1 {
+        font-size: 30px;
+    }
+    
+    .form_form {
+        font-size: 20px;
+        line-height: 22px;
+    }
+    
+    .form_span {
+        font-size: 16px;
+        line-height: 18px;
+    }
+    
+    .form_input {
+        width: 500px;
+    }    
+    
+    .select {
+        width: 20px;
+    }    
+    
+    .form_container {
+        width: 500px;
+    }
+    
+    .form_p {
+        font-size: 20px;
+        line-height: 26px;
+        letter-spacing: 2px;
+    }
+    
+    .form_label {
+        font-size: 20px;
+    }
+    
+    .form_t2 {
+        font-size: 20px;
+    }
+        
+    .form_image {
+        height: 200px;
+        width: 200px;
+    }
+    
+    .error {
+        font-size: 16px;
+    }
+
+    .post_container,
+    .form_container {
+        padding-bottom: 100px;
+    }
+
+    .post_multicontainer {
+        margin: 0 auto 50px;
+        position: relative;
+    }
+
+    .post_multicontainer:last-of-type::after {
+        content: "";
+        border: 1px solid transparent;
+        height: 5px;
+        display: inline-block;
+        position: absolute;
+        top: 400px;
+
+    }
+
+    .post_container .post_post {
+        width: 200px;
+        height: 300px;
+    }
+    
+    .post_container .post_good {
+        width: 40px;
+        height: 40px;
+        top: 230px;
+        left: 140px;
+        font-size: 20px;
+        line-height: 50px;
+    }
+
+    .post_bigimage {
+        width: 580px;
+        height: 580px;
+    }
+
+    .explain {
+        width: 700px;
+        height: 300px;
+        flex-direction: row;
+    }
+
+    .explain div {
+        height: 100%;
+        margin: 5px;
+        padding: 10px;
+    }
+
+    .explain_t1 {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .explain div {
+        width: 30%;
+    }
+
+    .explain t2 {
+        font-size: 20px;
+        line-height: 24px;
+    }
+    
+    .explain p {
+        font-size: 16px;
+        line-height: 20px;
+    }
+                
+    .bottom {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 20px;
+        font-size: 14px;
+        padding-bottom: 10px;
+        text-align: right;
+        z-index: 10;
+    }
+
+    .bottom p {
+        margin-right: 20px;
+    }
+}
+
