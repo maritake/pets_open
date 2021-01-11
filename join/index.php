@@ -32,13 +32,15 @@ if (!empty($_POST)) {
             exit(); 
         } else {
             //登録変更時
+            //パスワードをハッシュ処理
+            $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $update_password = $db->prepare('
             UPDATE members 
             SET password=?
             WHERE email=?
             ');
             $update_password->execute(array(
-                sha1($_POST['password']),
+                $hash,
                 $email,
             ));
             //ログイン情報を変更

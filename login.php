@@ -6,15 +6,16 @@ $error = NULL;
 if (!empty($_POST)) {
     if ($_POST['email'] !== '' && $_POST['password'] !== '') {
         //データベースを検索して会員情報を取得
-        $login = $db->prepare('SELECT * FROM members WHERE email=? AND password=?');
+        $login = $db->prepare(
+            'SELECT * FROM members WHERE email=?'
+        );
         $login->execute(array(
             $_POST['email'],
-            sha1($_POST['password']),
         ));
         $member = $login->fetch();
     }
-    //登録情報と一致していればログイン完了
-    if ($member) {
+    //登録したパスワードと一致していればログイン完了
+    if (password_verify($_POST['password'], $member['password'])) {
         $_SESSION['login'] = $_POST;
         header('Location: new_post.php');
         exit();

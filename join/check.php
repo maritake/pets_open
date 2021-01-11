@@ -55,11 +55,13 @@ if (!empty($_POST)) {
     //新規登録
     if ($_REQUEST['action'] === 'join') {
         //会員情報の登録
+        //パスワードをハッシュ処理
+        $hash = password_hash($password, PASSWORD_DEFAULT);
         $statement = $db->prepare('INSERT INTO members SET email=?, name=?, password=?, date_join=NOW(), date_modified=NOW()');
         $result = $statement->execute(array(
             $email,
             $name,
-            sha1($password),
+            $hash,
         ));
         //好きな動物の登録
         $statement = $db->prepare('INSERT INTO favoriteAnimals SET email=?, type=?');
