@@ -17,7 +17,7 @@ if ($_REQUEST['action'] === 'change') {
     }
 } else if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['POSTinfo'])) {
     //書き直し時
-    $number = $_SESSION['POSTmember']['number'];
+    $number = $_SESSION['POSTinfo']['number'];
     //ペットの種類のチェックを反映するために変数にチェック状態を格納
     for ($i = 1; $i <= $number; $i++) {
         $pname[$i] = $_SESSION['POSTinfo']['pname'][$i];
