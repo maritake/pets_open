@@ -10,9 +10,16 @@ include(dirname(__FILE__) . '/../common/php_header.php');
 if ($_REQUEST['action'] === 'join') {
     //新規登録の場合
     $email = $_SESSION['POSTindex']['email'];
-    $password = $_SESSION['POSTindex']['password'];
     $name = $_SESSION['POSTmember']['name'];
     $favoritetype = $_SESSION['POSTmember']['favoritetype'];
+    //registrationテーブルのmember_idとパスワードを取得
+    $get_registration = $db->prepare('SELECT member_id, password FROM registration WHERE email=?');
+    $get_registration->execute(array(
+        $email,
+    ));
+    $registration = $get_registration->fetch(PDO::FETCH_ASSOC);
+    $member_id = $registration['member_id'];
+    $password = $registration['password'];
 } else if ($_REQUEST['action'] === 'change_member') {
     //会員情報変更の場合
     $name = $_SESSION['POSTmember']['name'];
@@ -70,15 +77,15 @@ if (!empty($_POST)) {
             foreach ($pets as $pet) {
                 $statement->execute(array(
                     $email,
+            // セッション変数にログイン情報を保持
+            $_SESSION['login']['email'] = $email;
+            $_SESSION['login']['member_id'] = $member_id;
                     $pet['pet_name'],
                     $pet['pet_type'],
                     $pet['pet_image'],
                 ));
             }
         }
-        // セッション変数にログイン情報を保持
-        $_SESSION['login']['email'] = $email;
-        $_SESSION['login']['password'] = $password;
     } else if ($_REQUEST['action'] === 'change_member') {
         $update_member = $db->prepare('
         UPDATE members
