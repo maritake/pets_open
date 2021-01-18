@@ -50,25 +50,18 @@ if (!empty($_SESSION['POSTinfo'])) {
     //情報照会時
     $number = count($pets);
 }
-//登録ボタンが押されたらデータベースに保存
+//登録ボタンが押されたらtokenを照合してデータベースに保存
 if (!empty($_POST)) {
-    //新規登録
-    if ($_REQUEST['action'] === 'join') {
-        //会員情報の登録
-        //パスワードをハッシュ処理
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $statement = $db->prepare('INSERT INTO members SET email=?, name=?, password=?, date_join=NOW(), date_modified=NOW()');
-        $result = $statement->execute(array(
-            $email,
-            $name,
-            $hash,
-        ));
-        //好きな動物の登録
-        $statement = $db->prepare('INSERT INTO favoriteAnimals SET email=?, type=?');
-        foreach ($favoritetype as $type) {
-            $statement->execute(array(
+    if (isset($_POST['csrf_token']) && $_POST['csrf_token'] == $_SESSION['csrf_token']) {
+        //新規登録
+        if ($_REQUEST['action'] === 'join') {
+            //会員情報の登録
+            $statement = $db->prepare('INSERT INTO members SET member_id=?, email=?, password=?, name=?, date_join=NOW(), date_modified=NOW(), latest_login=NOW(), try_login=0');
+            $result = $statement->execute(array(
+                $member_id,
                 $email,
-                $type,
+                $password,
+                $name,
             ));
         }        
         //ペット情報の登録
@@ -143,6 +136,10 @@ if (!empty($_POST)) {
     header('Location: /pets/complete.php?from=join');
     exit();
 }
+//CSRF対策
+$random = openssl_random_pseudo_bytes(16);
+$csrf_token = bin2hex($random);
+$_SESSION['csrf_token'] = $csrf_token;
 include(dirname(__FILE__) . '/../common/html_header.php');
 ?>
 
@@ -243,6 +240,7 @@ include(dirname(__FILE__) . '/../common/html_header.php');
             <?php endif; ?>
                 
             <div>
+                    <input type="hidden" name="csrf_token" value="<?php print($csrf_token); ?>">
                     <input type="hidden" name="submit" value="submit">
                     <input class="form_input" type="submit" value="登録">
                 </div>

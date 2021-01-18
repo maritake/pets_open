@@ -6,21 +6,16 @@ if ($_REQUEST['action'] !== 'join' && $_REQUEST['action'] !== 'rewrite' && $_REQ
 session_start();
 include(dirname(__FILE__) . '/../common/php_header.php');
 $error = NULL;
-// POSTされた時にエラーチェックをする
+// POSTされた時にエラーチェックとcsrf_tokenの照合
 if (!empty($_POST)) {
-    // 各項目のエラーチェック
-    if ($_POST['password'] === '') {
-        $error['password'] = 'blunk';
-    } else if (mb_strlen($_POST['password']) < 8) {
-        $error['password'] = 'short';
-    } else if ($_POST['password'] !== $_POST['password_check']) {
-        $error['password'] = 'false';
-    }
-    if ($_POST['action'] === 'join') {
-        if ($_POST['email'] === '') {
-            $error['email'] = 'blunk';
-        } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $error['email'] = 'notemail';
+    if (isset($_POST['csrf_token']) && $_POST['csrf_token'] == $_SESSION['csrf_token']) {
+        // 各項目のエラーチェック
+        if ($_POST['password'] === '') {
+            $error['password'] = 'blunk';
+        } else if (mb_strlen($_POST['password']) < 8) {
+            $error['password'] = 'short';
+        } else if ($_POST['password'] !== $_POST['password_check']) {
+            $error['password'] = 'false';
         }
     }    
     // エラーがなければデータベース登録or更新して次のページにジャンプ
@@ -54,6 +49,10 @@ if (!empty($_POST)) {
 if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['POSTindex'])) {
     $_POST = $_SESSION['POSTindex'];
 }
+//CSRF対策
+$random = openssl_random_pseudo_bytes(16);
+$csrf_token = bin2hex($random);
+$_SESSION['csrf_token'] = $csrf_token;
 include(dirname(__FILE__) . '/../common/html_header.php'); 
 ?>
 
@@ -118,13 +117,15 @@ include(dirname(__FILE__) . '/../common/html_header.php');
                     <?php if ($_REQUEST['action'] === 'change'): ?>
                     <div>
                             <input type="hidden" name="action" value="change">
-                            <input class="form_input" type="submit" value="変更する">
-                    </div>
-<!-- 新規登録時 -->             
-                    <?php else: ?>
+                            <input type="hidden" name="csrf_token" value="<?php print($csrf_token); ?>">
+                            <input class="form_input" type="submit" value="確定">
+                        </div>
+                        <!-- 新規登録時 -->             
+                        <?php else: ?>
                     <div>
+                        <input type="hidden" name="csrf_token" value="<?php print($csrf_token); ?>">
                         <input type="hidden" name="action" value="join">
-                        <input class="form_input" type="submit" value="登録する">
+                        <input class="form_input" type="submit" value="確定">
                     </div>
                     <?php endif; ?> 
                 </form>

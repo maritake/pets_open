@@ -7,10 +7,12 @@ $get_petsname->execute(array($_SESSION['login']['email']));
 $petsname = $get_petsname->fetchAll(PDO::FETCH_ASSOC);
 // POSTされた時にエラーチェックする
 if (!empty($_POST)) {
-    //コメントの長さを確認
-    if (!($_POST['comment'] === '')) {
-        if (mb_strlen($_POST['comment']) > 100) {
-            $error['comment'] = 'length';
+    if (isset($_POST['csrf_token']) && $_POST['csrf_token'] == $_SESSION['csrf_token']) {
+        //コメントの長さを確認
+        if (!($_POST['comment'] === '')) {
+            if (mb_strlen($_POST['comment']) > 100) {
+                $error['comment'] = 'length';
+            }
         }
     }
     //写真添付の有無の確認
@@ -42,6 +44,10 @@ if (!empty($_POST)) {
         exit();
     }
 }
+//CSRF対策
+$random = openssl_random_pseudo_bytes(16);
+$csrf_token = bin2hex($random);
+$_SESSION['csrf_token'] = $csrf_token;
 include(dirname(__FILE__) . '/common/html_header.php');
 ?>
 
@@ -93,6 +99,7 @@ include(dirname(__FILE__) . '/common/html_header.php');
                     <?php endif; ?>
                 </div>
                 <div>
+                        <input type="hidden" name="csrf_token" value="<?php print($csrf_token); ?>">
                         <input class="form_input" type="submit" value="投稿する">
                 </div> 
             </form>
