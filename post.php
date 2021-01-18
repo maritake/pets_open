@@ -14,20 +14,21 @@ if (!empty($_POST)) {
                 $error['comment'] = 'length';
             }
         }
-    }
-    //写真添付の有無の確認
-    if (!is_uploaded_file($_FILES['picture']['tmp_name'])){
-        $error['picture'] = 'blunk';
-    } else {
-        //ファイルの種類を確認
-        $ext = substr($_FILES['picture']['name'], -3);
-        if ($ext != 'png' && $ext != 'jpeg' && $ext != 'jpg' && $ext !='gif' && $ext != 'JPG') {
-            $error['picture'] = 'type';
+        //写真添付の有無の確認
+        if (!is_uploaded_file($_FILES['picture']['tmp_name'])){
+            $error['picture'] = 'blunk';
         } else {
-            //一時ファイルを保存ファイルにコピーできたか確認
-            $image = date('YmdHis') . $_FILES['picture']['name'];
-            if (!move_uploaded_file($_FILES['picture']['tmp_name'], "images/" . $image)) {
-                $error['picture'] = 'save';
+            //ファイルの種類を確認
+            $ext = substr($_FILES['picture']['name'], -3);
+            if ($ext != 'png' && $ext != 'jpeg' && $ext != 'jpg' && $ext !='gif' && $ext != 'JPG') {
+                $error['picture'] = 'type';
+            } else {
+                //一時ファイルを保存ファイルにコピーできたか確認
+                //ファイル名のみを取得（ディレクトリトラバーサル対策）
+                $image = date('YmdHis') . basename($_FILES['picture']['name']);
+                if (!move_uploaded_file($_FILES['picture']['tmp_name'], "images/" . $image)) {
+                    $error['picture'] = 'save';
+                }
             }
         }
     }

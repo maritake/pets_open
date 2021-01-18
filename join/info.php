@@ -57,7 +57,8 @@ if (!empty($_POST)) {
                     $error['picture'][$i] = 'type';
                 } else {
                     //一時ファイルを保存ファイルにコピーできたか確認
-                    $image[$i] = date('YmdHis') . $_FILES["picture${i}"]['name'];
+                    //ファイル名のみを取得（ディレクトリトラバーサル対策）
+                    $image[$i] = date('YmdHis') . basename($_FILES["picture${i}"]['name']);
                     if (!move_uploaded_file($_FILES["picture${i}"]['tmp_name'], dirname(__FILE__) . '/../images/' . $image[$i])) {
                         $error['picture'][$i] = 'save';
                     } 
