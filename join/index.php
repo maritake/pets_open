@@ -27,6 +27,22 @@ if (!empty($_POST)) {
             exit(); 
         } else {
             //登録変更時
+            //登録済みのメールアドレスとの重複チェック
+            $check_email = $db->prepare(
+                'SELECT * FROM members WHERE email=?'
+            );
+            $check_email->execute(array(
+                $_POST['email'],
+            ));
+            $is_exist_email = !empty($check_email->fetch(PDO::FETCH_ASSOC));  //すでに登録済みであればtrueを格納
+            if ($_POST['email'] === '') {
+                $error['email'] = 'blunk';
+            } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+                $error['email'] = 'notemail';
+            } else if ($is_exist_email) {
+                $error['email'] = 'exist';
+            }
+        }    
             //パスワードをハッシュ処理
             $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $update_password = $db->prepare('
