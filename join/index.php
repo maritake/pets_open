@@ -1,5 +1,5 @@
 <?php
-if ($_REQUEST['action'] !== 'join' && $_REQUEST['action'] !== 'rewrite' && $_REQUEST['action'] !== 'change') {
+if ($_REQUEST['action'] !== 'join' && $_REQUEST['action'] !== 'change') {
     header('Location: /pets/index.php');
     exit();
 }
@@ -17,16 +17,7 @@ if (!empty($_POST)) {
         } else if ($_POST['password'] !== $_POST['password_check']) {
             $error['password'] = 'false';
         }
-    }    
-    // エラーがなければデータベース登録or更新して次のページにジャンプ
-    if (!isset($error)) {   
         if ($_POST['action'] === 'join') {
-            //新規登録時        
-            $_SESSION['POSTindex'] = $_POST;
-            header('Location: /pets/join/member.php?action=join');
-            exit(); 
-        } else {
-            //登録変更時
             //登録済みのメールアドレスとの重複チェック
             $check_email = $db->prepare(
                 'SELECT * FROM members WHERE email=?'
@@ -43,27 +34,41 @@ if (!empty($_POST)) {
                 $error['email'] = 'exist';
             }
         }    
+        // エラーがなければデータベース登録or更新して次のページにジャンプ
+        if (!isset($error)) {   
             //パスワードをハッシュ処理
             $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $update_password = $db->prepare('
-            UPDATE members 
-            SET password=?
-            WHERE email=?
-            ');
-            $update_password->execute(array(
-                $hash,
-                $email,
-            ));
-            //ログイン情報を変更
-            $_SESSION['login']['password'] = $_POST['password'];
-            header('Location: /pets/complete.php?from=change');
-            exit();
+            if ($_POST['action'] === 'join') {
+                //新規登録時 
+                //registrationテーブルに一時登録
+                $register = $db->prepare(
+                    'INSERT INTO registration SET email=?, password=?'
+                );
+                $register->execute(array(
+                    $_POST['email'],
+                    $hash,
+                ));
+                $_SESSION['POSTindex']['email'] = $_POST['email'];
+                header('Location: /pets/join/member.php?action=join');
+                exit(); 
+            } else {
+                //登録変更時
+                //パスワードをハッシュ処理
+                $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                $update_password = $db->prepare(
+                    'UPDATE members SET password=? WHERE member_id=?'
+                );
+                $update_password->execute(array(
+                    $hash,
+                    $member_id,
+                ));
+                header('Location: /pets/complete.php?from=change');
+                exit();
+            }
         }
+    } else {
+        header('Location: /pets/index.php');
     }
-}
-//書き直しの処理
-if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['POSTindex'])) {
-    $_POST = $_SESSION['POSTindex'];
 }
 //CSRF対策
 $random = openssl_random_pseudo_bytes(16);
@@ -76,7 +81,7 @@ include(dirname(__FILE__) . '/../common/html_header.php');
         <div class="form_container">
             <t1 class="form_t1">会員登録</t1>
             <p class="form_p">以下の項目を記入し、<br>
-            「登録する」ボタンを<br>
+            「確定」ボタンを<br>
             クリックしてください</p>
                 <form class="form_form" action="" method="POST">
                     <div>
@@ -98,6 +103,10 @@ include(dirname(__FILE__) . '/../common/html_header.php');
                         <!-- 入力情報がemailアドレス以外の場合のエラーメッセージ -->
                         <?php if ($error['email'] === 'notemail'): ?>
                         <p class="error"> ※有効なe-mailアドレスを入力してください</p> 
+                        <?php endif; ?>
+                        <!-- emailアドレスが登録済みの場合のエラーメッセージ -->
+                        <?php if ($error['email'] === 'exist'): ?>
+                        <p class="error"> ※このe-mailアドレスは既に登録されています</p> 
                         <?php endif; ?>
                         <?php endif; ?>
                     </div>

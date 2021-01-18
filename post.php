@@ -2,8 +2,8 @@
 include(dirname(__FILE__) . '/common/php_header.php');
 $error = NULL;
 //ペットの名前と種類を取得
-$get_petsname = $db->prepare('SELECT id, pet_name FROM pets WHERE email=?');
-$get_petsname->execute(array($_SESSION['login']['email']));
+$get_petsname = $db->prepare('SELECT id, pet_name FROM pets WHERE member_id=?');
+$get_petsname->execute(array($_SESSION['login']['member_id']));
 $petsname = $get_petsname->fetchAll(PDO::FETCH_ASSOC);
 // POSTされた時にエラーチェックする
 if (!empty($_POST)) {
@@ -31,18 +31,20 @@ if (!empty($_POST)) {
                 }
             }
         }
-    }
-    //エラーがなければデータベースに登録して投稿を完了
-    if(!isset($error)) {
-        $statement = $db->prepare('INSERT INTO posts SET email=?, photo=?, comment=?, pet_id=?, good=0, date_created=NOW()');
-        $statement->execute(array(
-            $_SESSION['login']['email'],
-            $image,
-            $_POST['comment'],
-            $_POST['petid'],
-        ));
-        header('Location: /pets/complete.php?from=post');
-        exit();
+        //エラーがなければデータベースに登録して投稿を完了
+        if(!isset($error)) {
+            $statement = $db->prepare('INSERT INTO posts SET member_id=?, photo=?, comment=?, pet_id=?, good=0, date_created=NOW()');
+            $statement->execute(array(
+                $_SESSION['login']['member_id'],
+                $image,
+                $_POST['comment'],
+                $_POST['petid'],
+            ));
+            header('Location: /pets/complete.php?from=post');
+            exit();
+        }
+    } else {
+        header('Locarion: /pets/index.php');
     }
 }
 //CSRF対策

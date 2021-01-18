@@ -27,8 +27,8 @@ if ($_REQUEST['action'] === 'join') {
 } else if ($_REQUEST['action'] === 'check'){
     //会員情報照会の場合
     //好きな動物を取得
-    $get_favoritetype = $db->prepare('SELECT type FROM favoriteAnimals WHERE email=?');
-    $get_favoritetype->execute(array($email));
+    $get_favoritetype = $db->prepare('SELECT type FROM favoriteAnimals WHERE member_id=?');
+    $get_favoritetype->execute(array($member_id));
     $favoritetype = $get_favoritetype->fetchAll(PDO::FETCH_COLUMN);
 }
 $search = ['dog', 'cat', 'small', 'reptiles', 'others'];
@@ -70,78 +70,89 @@ if (!empty($_POST)) {
                 $password,
                 $name,
             ));
-        }        
-        //ペット情報の登録
-        if (isset($number)) {
-            $statement = $db->prepare('INSERT INTO pets SET email=?, pet_name=?, pet_type=?, pet_image=?');
-            foreach ($pets as $pet) {
+            //好きな動物の登録
+            $statement = $db->prepare('INSERT INTO favoriteAnimals SET member_id=?, type=?');
+            foreach ($favoritetype as $type) {
                 $statement->execute(array(
-                    $email,
+                    $member_id,
+                    $type,
+                ));
+            }        
+            //ペット情報の登録
+            if (isset($number)) {
+                $statement = $db->prepare('INSERT INTO pets SET member_id=?, pet_name=?, pet_type=?, pet_image=?');
+                foreach ($pets as $pet) {
+                    $statement->execute(array(
+                        $member_id,
+                        $pet['pet_name'],
+                        $pet['pet_type'],
+                        $pet['pet_image'],
+                    ));
+                }
+            }
             // セッション変数にログイン情報を保持
             $_SESSION['login']['email'] = $email;
             $_SESSION['login']['member_id'] = $member_id;
+        } else if ($_REQUEST['action'] === 'change_member') {
+            $update_member = $db->prepare(
+                'UPDATE members
+                SET name=?,
+                date_modified=NOW()
+                WHERE member_id=?'
+            );
+            $update_member->execute(array(
+                $name,
+                $member_id,
+            ));
+            $delete_favorite = $db->prepare(
+                'DELETE FROM favoriteAnimals
+                WHERE member_id=?'
+            );
+            $delete_favorite->execute(array(
+                $member_id,
+            ));
+            $insert_favorite = $db->prepare(
+                'INSERT INTO favoriteAnimals
+                SET member_id=?, type=?'
+            );
+            foreach ($favoritetype as $type) {
+                $insert_favorite->execute(array(
+                    $member_id,
+                    $type,
+                ));
+            }
+        } else if ($_REQUEST['action'] === 'change_info') {
+            $delete_pet = $db->prepare(
+                'DELETE FROM pets
+                WHERE member_id=?'
+            );
+            $delete_pet->execute(array(
+                $member_id
+            ));
+            $insert_pet = $db->prepare(
+                'INSERT INTO pets
+                SET member_id=?, pet_name=?, pet_type=?, pet_image=?'
+            );
+            foreach ($pets as $pet) {
+                $insert_pet->execute(array(
+                    $member_id,
                     $pet['pet_name'],
                     $pet['pet_type'],
                     $pet['pet_image'],
                 ));
             }
         }
-    } else if ($_REQUEST['action'] === 'change_member') {
-        $update_member = $db->prepare('
-        UPDATE members
-        SET name=?,
-        date_modified=NOW()
-        WHERE email=?
-        ');
-        $update_member->execute(array(
-            $name,
-            $email,
-        ));
-        $delete_favorite = $db->prepare('
-        DELETE FROM favoriteAnimals
-        WHERE email=?
-        ');
-        $delete_favorite->execute(array(
-            $email,
-        ));
-        $insert_favorite = $db->prepare('
-        INSERT INTO favoriteAnimals
-        SET email=?, type=?         
-        ');
-        foreach ($favoritetype as $type) {
-            $insert_favorite->execute(array(
-                $email,
-                $type,
-            ));
-        }
-    } else if ($_REQUEST['action'] === 'change_info') {
-        $delete_pet = $db->prepare('
-        DELETE FROM pets
-        WHERE email=?
-        ');
-        $delete_pet->execute(array(
-            $email
-        ));
-        $insert_pet = $db->prepare('
-        INSERT INTO pets
-        SET email=?, pet_name=?, pet_type=?, pet_image=?
-        ');
-        foreach ($pets as $pet) {
-            $insert_pet->execute(array(
-                $email,
-                $pet['pet_name'],
-                $pet['pet_type'],
-                $pet['pet_image'],
-            ));
-        }
+        //セッション変数のリセット
+        unset($_SESSION['POSTindex']);
+        unset($_SESSION['POSTmember']);
+        unset($_SESSION['POSTinfo']);
+        //登録完了画面に遷移
+        header('Location: /pets/complete.php?from=join');
+        exit();
+    } else {
+        //tokenが不一致の場合はトップページに遷移
+        header('Location: /pets/index.php');
     }
-    //セッション変数のリセット
-    unset($_SESSION['POSTindex']);
-    unset($_SESSION['POSTmember']);
-    unset($_SESSION['POSTinfo']);
-    //登録完了画面に遷移
-    header('Location: /pets/complete.php?from=join');
-    exit();
 }
 //CSRF対策
 $random = openssl_random_pseudo_bytes(16);

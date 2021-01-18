@@ -55,8 +55,8 @@ if ($_REQUEST['action'] === 'join') {
 } else if ($_REQUEST['action'] === 'change') {
     //登録変更時
     //好きな動物を取得
-    $get_favoritetype = $db->prepare('SELECT type FROM favoriteAnimals WHERE email=?');
-    $get_favoritetype->execute(array($email));
+    $get_favoritetype = $db->prepare('SELECT type FROM favoriteAnimals WHERE member_id=?');
+    $get_favoritetype->execute(array($member_id));
     $favoritetype = $get_favoritetype->fetchAll(PDO::FETCH_COLUMN);
 } else if ($_REQUEST['action'] === 'rewrite' && isset($_SESSION['POSTmember'])) {
     //書き直しの処理
@@ -152,7 +152,6 @@ include(dirname(__FILE__) . '/../common/html_header.php');
                     </div>
                         
                     <div>
-                            <a href="/pets/join/index.php?action=rewrite">←戻る</a>
                             <input class="form_input" type="submit" value="次に進む">
                     </div>
                     <?php endif; ?> 

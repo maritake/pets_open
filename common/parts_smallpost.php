@@ -13,7 +13,7 @@ if (!empty($_SESSION['login'])) {
     
     <?php if (!empty($_SESSION['login'])): ?>
     <div class="post_good_small
-    <?php if(in_array($email, $goods)) {
+    <?php if(in_array($member_id, $goods)) {
         print(' post_good_selected');
     }
     ?>

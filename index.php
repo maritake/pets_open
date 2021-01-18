@@ -2,7 +2,7 @@
 //loginせずに見る場合（全ての投稿を表示）
 include(dirname(__FILE__) . '/common/php_header.php');
 //全投稿を取得
-$sql_posts = 'SELECT id, email, photo, comment, pet_id, good, date_created FROM posts ORDER BY id DESC';
+$sql_posts = 'SELECT id, member_id, photo, comment, pet_id, good, date_created FROM posts ORDER BY id DESC';
 $get_posts = $db->query($sql_posts);
 $posts = $get_posts->fetchAll(PDO::FETCH_ASSOC);
 include(dirname(__FILE__) . '/common/html_header.php');

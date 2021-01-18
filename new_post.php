@@ -4,8 +4,8 @@ include(dirname(__FILE__) . '/common/php_header.php');
 
 //ページ毎のphpを記述
 //好きな動物を取得
-$get_favoritetypes = $db->prepare('SELECT type FROM favoriteAnimals WHERE email=?');
-$get_favoritetypes->execute(array($email));
+$get_favoritetypes = $db->prepare('SELECT type FROM favoriteAnimals WHERE member_id=?');
+$get_favoritetypes->execute(array($member_id));
 $favoritetypes = $get_favoritetypes->fetchAll(PDO::FETCH_COLUMN);
 
 //好きな動物を日本語文字列に変換
@@ -16,7 +16,7 @@ $JP_favoritetypes = str_replace($search, $replace, $str_favoritetypes);
 
 // 好きな動物の投稿を取得
 $sql_posts = 
-'SELECT po.id, po.email, po.photo, po.comment, po.pet_id, po.date_created 
+'SELECT po.id, po.member_id, po.photo, po.comment, po.pet_id, po.date_created 
 FROM posts po LEFT OUTER JOIN pets pe 
 ON po.pet_id=pe.id 
 WHERE pe.pet_type=?';

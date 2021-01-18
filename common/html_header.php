@@ -22,7 +22,7 @@
             <div id="logo_side">
                 <p>
                     <?php
-                    print(htmlspecialchars($name, ENT_QUOTES));
+                    print(htmlspecialchars($logined_name, ENT_QUOTES));
                     ?>
                 </p>
                 <?php 

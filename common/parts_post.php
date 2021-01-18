@@ -1,6 +1,6 @@
 <?php
 if (!empty($_SESSION['login'])) {
-    $get_good = $db->prepare('SELECT email FROM goods WHERE post_id=?');
+    $get_good = $db->prepare('SELECT member_id FROM goods WHERE post_id=?');
     $get_good->execute(array($post['id']));
     $goods = $get_good->fetchAll(PDO::FETCH_COLUMN);
 }
@@ -12,7 +12,7 @@ if (!empty($_SESSION['login'])) {
 
 <?php if (!empty($_SESSION['login'])): ?>
 <div class="post_good
-<?php if(in_array($email, $goods)) {
+<?php if(in_array($member_id, $goods)) {
     print(' post_good_selected');
 }
 ?>

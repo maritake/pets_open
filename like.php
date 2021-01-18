@@ -6,20 +6,20 @@ $get_favorite_pets = $db->prepare(
     'SELECT DISTINCT p.pet_id 
     FROM posts p INNER JOIN favoritePets f 
     ON p.pet_id=f.favorite_pet_id 
-    WHERE f.email=? 
+    WHERE f.member_id=? 
     ORDER BY p.id DESC'
     );
-    $get_favorite_pets->execute(array($email));
+    $get_favorite_pets->execute(array($member_id));
     $favorite_pets = $get_favorite_pets->fetchAll(PDO::FETCH_COLUMN);
     //いいねした投稿を取得
     $get_good_posts = $db->prepare(
         'SELECT p.id, p.photo, p.comment, p.pet_id 
     FROM posts p, goods g 
-    WHERE p.id=g.post_id AND g.email=? 
+    WHERE p.id=g.post_id AND g.member_id=? 
     ORDER BY p.id DESC'
     );
     $get_good_posts->execute(array(
-        $email
+        $member_id
     ));
     $good_posts = $get_good_posts->fetchAll(PDO::FETCH_ASSOC); 
     include(dirname(__FILE__) . '/common/html_header.php');

@@ -4,10 +4,10 @@ include(dirname(__FILE__) . '/common/php_header.php');
 $get_datejoin = $db->prepare('
 SELECT date_join 
 FROM members
-WHERE email=?
+WHERE member_id=?
 ');
 $get_datejoin->execute(array(
-    $email,
+    $member_id,
 ));
 $datejoin = $get_datejoin->fetch(PDO::FETCH_COLUMN);
 include(dirname(__FILE__) . '/common/html_header.php');
@@ -35,9 +35,9 @@ include(dirname(__FILE__) . '/common/html_header.php');
 
             //ペットのお気に入り登録数を取得
             $get_like_number = $db->prepare('
-            SELECT f.email, m.name
+            SELECT f.member_id, m.name
             FROM favoritePets f, members m
-            WHERE f.email=m.email AND f.favorite_pet_id=?
+            WHERE f.member_id=m.member_id AND f.favorite_pet_id=?
             ');
             $get_like_number->execute(array(
                 $pet['id'],
@@ -128,10 +128,10 @@ include(dirname(__FILE__) . '/common/html_header.php');
             $sql =
             'SELECT id, photo, comment, pet_id, date_created
             FROM posts 
-            WHERE pet_id=0 AND email=?
+            WHERE pet_id=0 AND member_id=?
             ORDER BY id DESC';
             $get_posts = $db->prepare($sql);
-            $get_posts->execute(array($email));
+            $get_posts->execute(array($member_id));
             $posts = $get_posts->fetchAll(PDO::FETCH_ASSOC);
             if (count($posts) !==0) :
 
