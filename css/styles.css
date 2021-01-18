@@ -304,6 +304,11 @@ a {
     font-size: 18px;
 }
 
+.form_label_red {
+    color: darkviolet;
+    line-height: 30px;
+}
+
 .form_t2 {
     display: inline-block;
     color: black;
@@ -847,6 +852,7 @@ a {
         height: 50px;
         vertical-align: middle;
         line-height: 50px;
+        font-size: 25px;
     }
 
     #logo_side_unlogined
@@ -1045,16 +1051,22 @@ a {
         font-size: 16px;
         line-height: 20px;
     }
+
+    #newpost_btn {
+        bottom: 50px;
+    }
                 
     .bottom {
         position: fixed;
         bottom: 0;
-        width: 100%;
-        height: 20px;
+        right: 0;
+        height: 30px;
+        width: 200px;
         font-size: 14px;
+        padding-top: 0;
         padding-bottom: 10px;
         text-align: right;
-        z-index: 10;
+        z-index: 15;
     }
 
     .bottom p {

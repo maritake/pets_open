@@ -8,6 +8,12 @@ if (!empty($_SESSION['login'])) {
     $get_name = $db->prepare('SELECT name FROM members WHERE email=?');
     $get_name->execute(array($email));
     $name = $get_name->fetch(PDO::FETCH_COLUMN);
+    //ニックネームが6文字以上の場合は最初の5文字だけを切り出す
+    if (mb_strlen($name, 'UTF-8') > 5) {
+        $logined_name = mb_substr($name, 0, 5) . '...';
+    } else {
+        $logined_name = $name;
+    }
     //自分のペット情報を取得
     $get_pet = $db->prepare('SELECT id, pet_name, pet_image, pet_type FROM pets WHERE email=?');
     $get_pet->execute(array($email));

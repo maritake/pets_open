@@ -157,7 +157,7 @@ include(dirname(__FILE__) . '/../common/html_header.php');
                         <?php endfor; ?>
                     <div>
                         <?php if ($_REQUEST['action'] !== 'change'): ?>
-                        <a href="/pets/join/member.php?action=rewrite">←戻る</a>
+                        <a class="form_label form_label_red" href="/pets/join/member.php?action=rewrite">←戻る</a>
                         <?php endif; ?>
                         <input class="form_input" type="submit" value="確認">
                     </div>    

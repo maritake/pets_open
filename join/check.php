@@ -215,29 +215,29 @@ include(dirname(__FILE__) . '/../common/html_header.php');
 
             <?php if ($_REQUEST['action'] === 'check'): ?>
                 <div>
-                    <a href="/pets/join/member.php?action=change">←会員情報(ニックネーム/好きな動物)を変更する</a><br>
-                    <a href="/pets/join/info.php?action=change">←ペット情報を変更する</a><br>
-                    <a href="/pets/new_post.php">変更しない</a>
+                    <a class="form_label form_label_red" href="/pets/join/member.php?action=change">←会員情報(ニックネーム/好きな動物)を変更する</a><br>
+                    <a class="form_label form_label_red" href="/pets/join/info.php?action=change">←ペット情報を変更する</a><br>
+                    <a class="form_label form_label_red" href="/pets/new_post.php">変更しない</a>
                 </div>
             
             <?php else: ?>
 
             <?php if ($_REQUEST['action'] === 'join'): ?>
                 <div>
-                    <a href="/pets/join/member.php?action=rewrite">←会員情報の入力に戻る</a><br>
+                    <a class="form_label form_label_red" href="/pets/join/member.php?action=rewrite">←会員情報の入力に戻る</a><br>
                 <?php if (isset($number)): ?>    
-                        <a href="/pets/join/info.php?action=rewrite">←ペット情報の入力に戻る</a><br>
+                        <a class="form_label form_label_red" href="/pets/join/info.php?action=rewrite">←ペット情報の入力に戻る</a><br>
                 <?php endif; ?>
                 </div>
             
             <?php elseif ($_REQUEST['action'] === 'change_member'): ?>
                 <div>
-                    <a href="/pets/join/member.php?action=change">←会員情報の入力に戻る</a>
+                    <a class="form_label form_label_red" href="/pets/join/member.php?action=change">←会員情報の入力に戻る</a>
                 </div>
 
             <?php elseif ($_REQUEST['action'] === 'change_info'): ?>
                 <div>
-                    <a href="/pets/join/info.php?action=change">←ペット情報の入力に戻る</a>
+                    <a class="form_label form_label_red" href="/pets/join/info.php?action=change">←ペット情報の入力に戻る</a>
                 </div>
             <?php endif; ?>
             <?php endif; ?>
